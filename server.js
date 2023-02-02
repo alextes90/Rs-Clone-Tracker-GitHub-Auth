@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 //code being passed from frontend
 
 app.get("/getAccessToken", async (req, res) => {
-  req.query.code;
+  console.log(req.query.code);
   const params =
     "?client_id=" +
     CLIENT_ID +
