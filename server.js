@@ -1,6 +1,6 @@
 const CLIENT_ID = "1a86f6a854cfd5cffcec";
 const CLIENT_SECRET = "dc21e6f0c87b744bb7280635700aef77afd51e4f";
-const REDIRECT_URL = "http://localhost:3000/tracer";
+const REDIRECT_URL = "http://localhost:3000/login";
 
 const express = require("express");
 const cors = require("cors");
