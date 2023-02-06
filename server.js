@@ -1,6 +1,11 @@
-const CLIENT_ID = "1a86f6a854cfd5cffcec";
-const CLIENT_SECRET = "dc21e6f0c87b744bb7280635700aef77afd51e4f";
-const REDIRECT_URL = "http://localhost:3000/login";
+require("dotenv").config();
+const CLIENT_ID_LOCALHOST = process.env.CLIENT_ID_LOCALHOST;
+const CLIENT_SECRET_LOCALHOST = process.env.CLIENT_SECRET_LOCALHOST;
+const REDIRECT_URL_LOCALHOST = process.env.REDIRECT_URL_LOCALHOST;
+
+const CLIENT_ID_NETLIFY = process.env.CLIENT_ID_NETLIFY;
+const CLIENT_SECRET_NETLIFY = process.env.CLIENT_SECRET_NETLIFY;
+const REDIRECT_URL_NETLIFY = process.env.REDIRECT_URL_NETLIFY;
 
 const express = require("express");
 const cors = require("cors");
@@ -16,15 +21,29 @@ app.use(bodyParser.json());
 
 app.get("/getAccessToken", async (req, res) => {
   console.log(req.query.code);
-  const params =
-    "?client_id=" +
-    CLIENT_ID +
-    "&client_secret=" +
-    CLIENT_SECRET +
-    "&code=" +
-    req.query.code +
-    "&redirect_uri=" +
-    REDIRECT_URL;
+  console.log(req.get("origin"));
+  let params = "";
+  if (req.get("origin").includes("local")) {
+    params =
+      "?client_id=" +
+      CLIENT_ID_LOCALHOST +
+      "&client_secret=" +
+      CLIENT_SECRET_LOCALHOST +
+      "&code=" +
+      req.query.code +
+      "&redirect_uri=" +
+      REDIRECT_URL_LOCALHOST;
+  } else {
+    params =
+      "?client_id=" +
+      CLIENT_ID_NETLIFY +
+      "&client_secret=" +
+      CLIENT_SECRET_NETLIFY +
+      "&code=" +
+      req.query.code +
+      "&redirect_uri=" +
+      REDIRECT_URL_NETLIFY;
+  }
 
   const response = await fetch(
     "https://github.com/login/oauth/access_token" + params,
@@ -36,7 +55,6 @@ app.get("/getAccessToken", async (req, res) => {
     }
   );
   const data = await response.json();
-  console.log(data);
   res.json(data);
 });
 
@@ -50,7 +68,6 @@ app.get("/getUserData", async (req, res) => {
     },
   });
   const data = await response.json();
-  console.log(data);
   res.json(data);
 });
 
